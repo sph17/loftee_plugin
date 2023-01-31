@@ -11,7 +11,9 @@ workflow vepAnnotate {
         String vep_docker
         String sv_base_mini_docker
         File hg38_fasta
+        File hg38_fasta_fai
         File human_ancestor_fa
+        File human_ancestor_fa_fai
         File top_level_fa
         String cohort_prefix
         RuntimeAttr? runtime_attr_normalize
@@ -29,6 +31,7 @@ workflow vepAnnotate {
             vcf_file=vcf_file,
             sv_base_mini_docker=sv_base_mini_docker,
             hg38_fasta=hg38_fasta,
+            hg38_fasta_fai=hg38_fasta_fai,
             runtime_attr_override = runtime_attr_normalize
     }
 
@@ -49,6 +52,7 @@ workflow vepAnnotate {
             vcf_file=splitVCF.no_header_vcf_output,
             top_level_fa=top_level_fa,
             human_ancestor_fa=human_ancestor_fa,
+            human_ancestor_fa_fai=human_ancestor_fa_fai,
             vep_docker=vep_docker,
             runtime_attr_override=runtime_attr_vep_annotate
         }
@@ -193,6 +197,7 @@ task normalizeVCF{
         File vcf_file
         String sv_base_mini_docker
         File hg38_fasta
+        File hg38_fasta_fai
         RuntimeAttr? runtime_attr_override
     }
 
@@ -309,6 +314,7 @@ task vepAnnotate{
         File vcf_file
         File top_level_fa
         File human_ancestor_fa
+        File human_ancestor_fa_fai
         String vep_docker
         RuntimeAttr? runtime_attr_override
     }
