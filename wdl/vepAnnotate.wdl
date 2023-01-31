@@ -128,7 +128,6 @@ task addGenotypes{
         bcftools merge \
         --no-version \
         --threads ~{thread_num} \
-        --naive \
         --Oz \
         --output ~{combined_vcf_name} \
         ~{vep_annotated_vcf} \
@@ -185,7 +184,7 @@ task mergeVCFs{
         set -euo pipefail
         VCFS="~{write_lines(vcf_contigs)}"
         cat $VCFS | awk -F '/' '{print $NF"\t"$0}' | sort -k1,1V | awk '{print $2}' > vcfs_sorted.list
-        bcftools concat --no-version --output-type z --file-list vcfs_sorted.list --output ~{merged_vcf_name}
+        bcftools concat --no-version --naive -Oz --file-list vcfs_sorted.list --output ~{merged_vcf_name}
     >>>
 
     output {
@@ -307,7 +306,7 @@ task splitVCF{
     command <<<
         set -euo pipefail  
 
-        bcftools view ~{vcf_file} --regions ~{chromosome} -O z -o ~{chromosome}.vcf.gz
+        bcftools view ~{vcf_file} --regions ~{chromosome} -Oz -o ~{chromosome}.vcf.gz
     
     >>>
 }
