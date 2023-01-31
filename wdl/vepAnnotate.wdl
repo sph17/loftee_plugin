@@ -233,12 +233,12 @@ task normalizeVCF{
     String prefix = basename(vcf_file, ".vcf.gz")
     String vcf_normalized_file_name = "~{prefix}.normalized.vcf.gz"
     String vcf_normalized_nogeno_file_name = "~{prefix}.normalized.stripped.vcf.gz"
-
+    String vcf_normalized_nogeno_idx_name = "~{prefix}.normalized.stripped.vcf.gz.tbi"
 
 
     output{
-        File vcf_normalized_file_with_genotype = vcf_normalized_file_name
-        File vcf_normalized_file_with_genotype_idx = vcf_normalized_file_name + ".tbi"
+        File vcf_normalized_file_with_genotype = "~{prefix}.normalized.vcf.gz"
+        File vcf_normalized_file_with_genotype_idx = "~{prefix}.normalized.vcf.gz.tbi"
         File vcf_no_genotype = "~{prefix}.normalized.stripped.vcf.gz"
         File vcf_no_genotype_idx = "~{prefix}.normalized.stripped.vcf.gz.tbi"
     }
@@ -246,11 +246,13 @@ task normalizeVCF{
     command <<<
         set -euo pipefail
 
-        bcftools norm -m - -f ~{hg38_fasta} -O z -o ~{vcf_normalized_file_name} ~{vcf_file}
+        bcftools norm -m - -f ~{hg38_fasta} -Oz -o ~{vcf_normalized_file_name} ~{vcf_file}
 
         bcftools index -f -t ~{vcf_normalized_file_name}
 
         bcftools view -G ~{vcf_normalized_file_name} -Oz -o ~{vcf_normalized_nogeno_file_name}
+
+        bcftools index -f -t ~{vcf_normalized_nogeno_file_name}
         
     >>>
 
