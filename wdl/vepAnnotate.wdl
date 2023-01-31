@@ -248,11 +248,11 @@ task normalizeVCF{
 
         bcftools norm -m - -f ~{hg38_fasta} -Oz -o ~{vcf_normalized_file_name} ~{vcf_file}
 
-        bcftools index -f -t ~{vcf_normalized_file_name}
+        bcftools index -t ~{vcf_normalized_file_name}
 
         bcftools view -G ~{vcf_normalized_file_name} -Oz -o ~{vcf_normalized_nogeno_file_name}
 
-        bcftools index -f -t ~{vcf_normalized_nogeno_file_name}
+        bcftools index -t ~{vcf_normalized_nogeno_file_name}
         
     >>>
 
