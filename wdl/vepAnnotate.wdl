@@ -250,7 +250,7 @@ task normalizeVCF{
 
         bcftools index -f -t ~{vcf_normalized_file_name}
 
-        bcftools view -G ~{vcf_normalized_file_name} -Oz -o vcf_normalized_nogeno_file_name
+        bcftools view -G ~{vcf_normalized_file_name} -Oz -o ~{vcf_normalized_nogeno_file_name}
         
     >>>
 
@@ -304,7 +304,7 @@ task splitVCF{
     command <<<
         set -euo pipefail  
 
-        bcftools view ~{vcf_file} --regions ~{chromosome} -O z -o  ~{chromosome}.vcf.gz
+        bcftools view ~{vcf_file} --regions ~{chromosome} -O z -o ~{chromosome}.vcf.gz
     
     >>>
 }
