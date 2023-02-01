@@ -49,7 +49,7 @@ workflow vepAnnotate {
 
         call vepAnnotate{
             input:
-            vcf_file=splitVCF.no_header_vcf_output,
+            vcf_file=splitVCF.vcf_output,
             top_level_fa=top_level_fa,
             human_ancestor_fa=human_ancestor_fa,
             human_ancestor_fa_fai=human_ancestor_fa_fai,
