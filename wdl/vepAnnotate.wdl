@@ -300,7 +300,6 @@ task splitVCF{
 
     output{
         File vcf_output = "~{chromosome}.vcf.gz"
-        File no_header_vcf_output = "~{chromosome}.noheader.vcf.gz"
     }
 
     command <<<
