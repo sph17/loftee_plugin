@@ -357,8 +357,12 @@ task vepAnnotate{
         File vep_vcf_file = vep_annotated_vcf_name
     }
 
+    String ancestor_dir = basename(human_ancestor_fa, "Homo_sapiens.GRCh38.dna.toplevel.fa.gz")
+
     command <<<
         set -euo pipefail
+
+        chmod a+rwx ~{ancestor_dir}
 
         vep --vcf \
         --force_overwrite \
