@@ -362,7 +362,7 @@ task vepAnnotate{
     command <<<
         set -euo pipefail
 
-        chmod a+rwx ~{ancestor_dir}
+        chmod a+rwx /cromwell_root/fc-902d987c-3fdc-45b4-9f75-d0ea1d7076f6/
 
         vep --vcf \
         --force_overwrite \
