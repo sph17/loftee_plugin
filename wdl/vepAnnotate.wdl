@@ -128,7 +128,7 @@ task addGenotypes{
         bcftools merge \
         --no-version \
         --threads ~{thread_num} \
-        --Oz \
+        -Oz \
         --output ~{combined_vcf_name} \
         ~{normalized_vcf} \
         ~{vep_annotated_vcf}
