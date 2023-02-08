@@ -93,13 +93,13 @@ task addGenotypes{
     }
 
     # CleanVcf5.FindRedundantMultiallelics
-    Float vcf_sizes = size(vep_annotated_vcf) + size(normalized_vcf)
-    Float input_size = vcf_sizes + "GB"
+    Float vep_annotate_sizes = size(vep_annotated_vcf, "GB") 
+    Float norm_vcf_sizes = size(normalized_vcf, "GB")
     Float base_disk_gb = 10.0
 
     RuntimeAttr runtime_default = object {
                                       mem_gb: 16,
-                                      disk_gb: ceil(base_disk_gb + input_size * 5.0),
+                                      disk_gb: ceil(base_disk_gb + (vep_annotate_sizes + norm_vcf_sizes) * 5.0),
                                       cpu_cores: 1,
                                       preemptible_tries: 3,
                                       max_retries: 1,
@@ -130,8 +130,8 @@ task addGenotypes{
         --threads ~{thread_num} \
         --Oz \
         --output ~{combined_vcf_name} \
-        ~{vep_annotated_vcf} \
-        ~{normalized_vcf}
+        ~{normalized_vcf} \
+        ~{vep_annotated_vcf}
 
         bcftools index -t ~{combined_vcf_name}
 
@@ -158,16 +158,21 @@ task mergeVCFs{
     # CleanVcf5.FindRedundantMultiallelics
     Float input_size = size(vcf_contigs, "GB")
     Float base_disk_gb = 10.0
-
+    Float base_mem_gb = 2.0
+    Float input_mem_scale = 3.0
+    Float input_disk_scale = 5.0
+    
     RuntimeAttr runtime_default = object {
-                                      mem_gb: 16,
-                                      disk_gb: ceil(base_disk_gb + input_size * 5.0),
-                                      cpu_cores: 1,
-                                      preemptible_tries: 3,
-                                      max_retries: 1,
-                                      boot_disk_gb: 10
-                                  }
+        mem_gb: base_mem_gb + input_size * input_mem_scale,
+        disk_gb: ceil(base_disk_gb + input_size * input_disk_scale),
+        cpu_cores: 1,
+        preemptible_tries: 3,
+        max_retries: 1,
+        boot_disk_gb: 10
+    }
+
     RuntimeAttr runtime_override = select_first([runtime_attr_override, runtime_default])
+    
     runtime {
         memory: "~{select_first([runtime_override.mem_gb, runtime_default.mem_gb])} GB"
         disks: "local-disk ~{select_first([runtime_override.disk_gb, runtime_default.disk_gb])} HDD"
