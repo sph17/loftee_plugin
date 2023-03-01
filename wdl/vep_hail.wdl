@@ -103,7 +103,7 @@ mt = hl.vep(mt, '~{loftee_json}')
 mt = mt.annotate_rows(eval_reg = hl.is_defined(evaluation_regions[mt.locus]), eval_reg_pm2 = hl.is_defined(evaluation_regions_pm2[mt.locus]))
 
 mt.write("fd_dataset_split_vep_docker.mt")
-
+CODE
   >>>
 
   output {
